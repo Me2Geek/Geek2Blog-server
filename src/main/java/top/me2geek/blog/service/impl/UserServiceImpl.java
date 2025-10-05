@@ -9,7 +9,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String login(LoginForm loginForm) {
-        return "";
+        return "登录成功";
     }
-
 }
