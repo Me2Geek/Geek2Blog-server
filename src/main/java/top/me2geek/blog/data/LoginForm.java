@@ -1,10 +1,13 @@
 package top.me2geek.blog.data;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.ToString;
 
+@AllArgsConstructor
+@Data
+@ToString
 public class LoginForm {
-    @Getter
     private String username;
-    @Getter
     private String password;
 }

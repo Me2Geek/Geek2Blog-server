@@ -1,6 +1,5 @@
 package top.me2geek.blog.service;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import top.me2geek.blog.data.LoginForm;
 
 public interface UserService {
@@ -10,6 +9,6 @@ public interface UserService {
      * @param loginForm LoginForm object
      * @return token
      */
-    String login(@RequestBody LoginForm loginForm);
+    String login(LoginForm loginForm);
 
 }
