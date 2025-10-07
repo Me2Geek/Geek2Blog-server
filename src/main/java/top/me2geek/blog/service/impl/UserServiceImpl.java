@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
         if (adminAccount == null) {
             result[0] = "error";
-            result[1] = "Admin account not initialized.";
+            result[1] = "[系统错误] 管理员账户未初始化";
             return result;
         }
 
