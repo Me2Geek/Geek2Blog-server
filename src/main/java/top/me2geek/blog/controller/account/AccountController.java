@@ -17,7 +17,7 @@ public class AccountController {
 
     @PostMapping("/login")
     public ApiResponse<String> onLogin(@RequestBody LoginForm loginForm) {
-        if (loginForm.toString().length() > 40) {
+        if (loginForm.getUsername().length() > 20 || loginForm.getPassword().length() > 20) {
             return ApiResponse.fail("用户名或密码过长");
         }
         String token = handleLogin(loginForm);
