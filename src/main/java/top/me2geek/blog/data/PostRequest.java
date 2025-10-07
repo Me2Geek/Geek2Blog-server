@@ -11,8 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Data
 @ToString
-public class LoginForm {
-    private String username;
-    private String password;
+public class PostRequest {
     private String token;
+    private Post post;
 }

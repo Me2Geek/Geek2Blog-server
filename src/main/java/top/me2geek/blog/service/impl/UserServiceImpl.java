@@ -5,6 +5,8 @@ import top.me2geek.blog.controller.account.AccountController;
 import top.me2geek.blog.data.LoginForm;
 import top.me2geek.blog.service.UserService;
 
+import java.util.UUID;
+
 /**
  * @author LangYa466
  * @date 2025/10/6
@@ -13,12 +15,31 @@ import top.me2geek.blog.service.UserService;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public String login(LoginForm loginForm) {
+    public String[] login(LoginForm loginForm) {
+        String[] result = new String[3];
+
         LoginForm adminAccount = AccountController.adminAccount;
 
-        if (loginForm.getUsername().equals(adminAccount.getUsername()) && loginForm.getPassword().equals(adminAccount.getPassword())) {
-            return "success";
+        if (adminAccount == null) {
+            result[0] = "error";
+            result[1] = "Admin account not initialized.";
+            return result;
         }
-        return "failed";
+
+        if (loginForm.getUsername().equals(adminAccount.getUsername()) &&
+                loginForm.getPassword().equals(adminAccount.getPassword())) {
+            result[0] = "success";
+            AccountController.adminAccount.setToken(randomAPIToken());
+            result[1] = AccountController.adminAccount.getToken();
+        } else {
+            result[0] = "failed";
+            result[1] = "null";
+        }
+
+        return result;
+    }
+
+    private String randomAPIToken() {
+        return (UUID.randomUUID().toString() + UUID.randomUUID()).replace("-", "");
     }
 }

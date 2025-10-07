@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import top.me2geek.blog.controller.account.AccountController;
+import top.me2geek.blog.controller.post.PostController;
 
 import java.io.File;
 import java.util.List;
@@ -38,10 +39,17 @@ public class JsonFileDataManager implements ManagerImpl {
         }
 
         AccountController.adminAccount = mapper.readValue(dataFile, new TypeReference<>() {});
+        log.info("加载管理员账户成功：{}", AccountController.adminAccount);
+
+        PostController.posts = mapper.readValue(dataFile, new TypeReference<>() {});
+        log.info("加载文章列表成功：{}", PostController.posts);
     }
 
     @Override
     public void destroy() throws Exception {
         mapper.writerWithDefaultPrettyPrinter().writeValue(dataFile, AccountController.adminAccount);
+        log.info("保存管理员账户成功：{}", AccountController.adminAccount);
+        mapper.writerWithDefaultPrettyPrinter().writeValue(dataFile, PostController.posts);
+        log.info("保存文章列表成功：{}", PostController.posts);
     }
 }
