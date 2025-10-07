@@ -35,6 +35,7 @@ public class AccountController {
             adminAccount.setToken(generateAPIToken());
             return null;
         }
+
         if (loginForm.getUsername().equals(adminAccount.getUsername()) &&
                 loginForm.getPassword().equals(adminAccount.getPassword())) {
             adminAccount.setToken(generateAPIToken());
