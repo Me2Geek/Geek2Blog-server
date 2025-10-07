@@ -47,16 +47,16 @@ public class JsonFileDataManager implements ManagerImpl {
         }
 
         AccountController.adminAccount = mapper.readValue(adminFile, LoginForm.class);
-        log.info("加载管理员账户成功：{}", AccountController.adminAccount);
+        log.info("加载管理员账户成功：{}", AccountController.adminAccount.getUsername());
 
-        PostController.posts = mapper.readValue(postsFile, new TypeReference<>() {});
+        PostController.posts = mapper.readValue(postsFile, new TypeReference<ArrayList<Post>>() {});
         log.info("加载文章列表成功 共 {} 篇", PostController.posts.size());
     }
 
     @Override
     public void destroy() throws Exception {
         mapper.writerWithDefaultPrettyPrinter().writeValue(adminFile, AccountController.adminAccount);
-        log.info("保存管理员账户成功：{}", AccountController.adminAccount);
+        log.info("保存管理员账户成功：{}", AccountController.adminAccount.getUsername());
 
         mapper.writerWithDefaultPrettyPrinter().writeValue(postsFile, PostController.posts);
         log.info("保存文章列表成功 共 {} 篇", PostController.posts.size());

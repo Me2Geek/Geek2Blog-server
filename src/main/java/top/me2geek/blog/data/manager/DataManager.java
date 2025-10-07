@@ -33,7 +33,6 @@ public class DataManager {
             }
         } catch (Exception e) {
             log.error("[数据管理系统] 初始化失败", e);
-            throw new RuntimeException(e);
         }
     }
 

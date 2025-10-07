@@ -1,15 +1,17 @@
 package top.me2geek.blog.controller.post;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.me2geek.blog.common.ApiResponse;
 import top.me2geek.blog.controller.account.AccountController;
 import top.me2geek.blog.data.Post;
 import top.me2geek.blog.data.PostRequest;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -20,6 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @RequestMapping("/post")
 public class PostController {
     public static List<Post> posts = new CopyOnWriteArrayList<>();
+    private final ConcurrentHashMap<String, byte[]> imageCache = new ConcurrentHashMap<>();
 
     @PostMapping("/get")
     public ApiResponse<List<Post>> onGet(@RequestBody Post request) {
@@ -34,6 +37,9 @@ public class PostController {
         }
 
         List<Post> result = posts.subList(0, id);
+        for (Post post : result) {
+            post.setContent(normalizeMarkdown(post.getContent()));
+        }
         return ApiResponse.success("获取成功", result);
     }
 
@@ -98,7 +104,59 @@ public class PostController {
         return ApiResponse.success("搜索成功", result);
     }
 
+    @PostMapping("/uploadImage")
+    public ApiResponse<String> uploadImage(
+            @RequestParam("token") String token,
+            @RequestPart("file") MultipartFile file) {
+
+        if (isNotAdmin(token)) return ApiResponse.fail("没有权限");
+
+        if (file == null || file.isEmpty()) return ApiResponse.fail("文件为空");
+
+        try {
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+
+            List<String> allowedTypes = Arrays.asList("webp", "png", "jpg", "jpeg", "apng", "gif");
+            if (!allowedTypes.contains(extension)) {
+                return ApiResponse.fail("不支持的图片格式，只支持 webp/png/jpg/jpeg/apng/gif");
+            }
+            String basePath = System.getProperty("user.dir") + File.separator + "images";
+            File imageDir = new File(basePath);
+            if (!imageDir.exists() && !imageDir.mkdirs()) {
+                return ApiResponse.fail("创建图片目录失败");
+            }
+
+            String newFileName = System.currentTimeMillis() + "." + extension;
+            File dest = new File(imageDir, newFileName);
+
+            file.transferTo(dest);
+
+            String imagePath = "/images/" + newFileName;
+            return ApiResponse.success("上传成功", imagePath);
+
+        } catch (IOException e) {
+            return ApiResponse.fail("上传失败：" + e.getMessage());
+        }
+    }
+
     private boolean isNotAdmin(String token) {
         return !AccountController.adminAccount.getToken().equals(token);
+    }
+
+    private String normalizeMarkdown(String content) {
+        if (content == null) return "";
+
+        content = content.replace("\r\n", "\n").replace("\\n", "\n");
+
+        content = content.replaceAll("(?m)^-$", "");
+
+        content = content.replaceAll("(#{1,6} .+)\\n(?!\\n|#)", "$1\n\n");
+
+        content = content.replaceAll("(?m)^(---|\\*\\*\\*|___)$", "\n$1\n");
+
+        content = content.replaceAll("\\n{3,}", "\n\n");
+
+        return content.trim();
     }
 }
