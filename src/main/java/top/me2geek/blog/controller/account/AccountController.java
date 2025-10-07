@@ -30,6 +30,7 @@ public class AccountController {
     private String handleLogin(LoginForm loginForm) {
         if (adminAccount == null) return null;
 
+        if (adminAccount.getUsername().equals("DEMODEMODEMODEMDOEMODE")) return null;
         if (loginForm.getUsername().equals(adminAccount.getUsername()) &&
                 loginForm.getPassword().equals(adminAccount.getPassword())) {
             adminAccount.setToken(generateAPIToken());
