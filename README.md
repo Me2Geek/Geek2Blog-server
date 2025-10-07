@@ -5,5 +5,5 @@
 
 ---
 
-[[Demo Blog]](https://demo.blog.me2geek.top
+[[Demo Blog]](https://demo.blog.me2geek.top)
 [[API Docs]](https://blog.me2geek.top/)
