@@ -36,6 +36,7 @@ public class PostController {
         List<Post> result = posts.subList(0, id);
         return ApiResponse.success("获取成功", result);
     }
+
     @PostMapping("/add")
     public ApiResponse<Post> onAdd(@RequestBody PostRequest postRequest) {
         if (isNotAdmin(postRequest.getToken())) return ApiResponse.fail("没有权限");

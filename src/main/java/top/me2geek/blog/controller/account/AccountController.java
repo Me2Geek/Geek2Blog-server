@@ -12,7 +12,6 @@ import top.me2geek.blog.service.UserService;
 @RestController
 @RequestMapping("/account")
 public class AccountController {
-
     public static LoginForm adminAccount =  new LoginForm("admin", "admin", "adminToken");
     private final UserService userService;
 

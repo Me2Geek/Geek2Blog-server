@@ -49,6 +49,7 @@ public class JsonFileDataManager implements ManagerImpl {
     public void destroy() throws Exception {
         mapper.writerWithDefaultPrettyPrinter().writeValue(dataFile, AccountController.adminAccount);
         log.info("保存管理员账户成功：{}", AccountController.adminAccount);
+
         mapper.writerWithDefaultPrettyPrinter().writeValue(dataFile, PostController.posts);
         log.info("保存文章列表成功：{}", PostController.posts);
     }
