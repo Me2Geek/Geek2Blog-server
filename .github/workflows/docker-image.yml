@@ -19,10 +19,13 @@ jobs:
         run: |
           IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/geek2blogserver
           TAG=${GITHUB_SHA::7}
+          echo "Building image $IMAGE_NAME:$TAG"
           docker build -t $IMAGE_NAME:$TAG -t $IMAGE_NAME:latest .
 
       - name: Push Docker image
         run: |
           IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/geek2blogserver
+          TAG=${GITHUB_SHA::7}
+          echo "Pushing image $IMAGE_NAME:$TAG"
           docker push $IMAGE_NAME:$TAG
           docker push $IMAGE_NAME:latest
