@@ -22,4 +22,4 @@ docker pull langya466/geek2blogserver:latest
 docker run -d -p 8080:8080 langya466/geek2blogserver:latest
 
 ```
-> 💡 **Tip:** 未完成项目不建议用于生产环境，如需绑定域名请使用反向代理
+> 💡 **Tip:** 如需绑定域名请使用反向代理
